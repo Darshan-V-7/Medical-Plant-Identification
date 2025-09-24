@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medicinal Plant Identifier</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body data-prediction="{{ 'true' if has_prediction else 'false' }}">
+
+<div class="container">
+    <!-- Upload Card -->
+    <div class="card" id="upload-card">
+        <h2>Upload a Medicinal Plant Image</h2>
+        <form id="upload-form" method="POST" enctype="multipart/form-data">
+            <input type="file" name="image" required>
+            <br>
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+
+    <!-- Info Card (only when prediction is available) -->
+    {% if has_prediction %}
+    <div class="card slide-in" id="info-card">
+        <h2>Prediction Result</h2>
+        <img src="{{ url_for('static', filename='uploaded_image.jpg') }}" width="200">
+        <p><strong>Plant:</strong> {{ prediction.plant }}</p>
+        <p><strong>Uses:</strong> {{ prediction.uses }}</p>
+        <p><strong>Soil Type:</strong> {{ prediction.soil }}</p>
+        <form method="GET" action="/">
+            <button type="submit">Try Another</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    const hasPrediction = document.body.dataset.prediction === "true";
+    const uploadCard = document.getElementById("upload-card");
+
+    window.addEventListener("load", () => {
+        if (hasPrediction && uploadCard) {
+            uploadCard.classList.add("slide-left");
+        }
+    });
+</script>
+
+</body>
+</html>
